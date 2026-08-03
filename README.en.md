@@ -19,6 +19,7 @@ If you want to deploy it yourself, please refer to the GitHub/Cloudflare Pages d
 ### v1.5 (Current)
 
 **Major Changes**:
+
 - Fixed deployed image generation failures by updating Gemini image generation requests to the current API contract: `responseFormat.image.aspectRatio`.
 - Updated the Gemini 3 Pro image model from the old preview name to the official `gemini-3-pro-image`, while preserving compatibility for old history records that still contain the preview model value.
 - Improved Google Gemini SDK error parsing so production no longer collapses API failures into only "unknown error".
@@ -26,6 +27,7 @@ If you want to deploy it yourself, please refer to the GitHub/Cloudflare Pages d
 ### v1.0 (Official Release)
 
 **Major Changes**:
+
 - ✅ **New Architecture Integration**: Moved source code to `src` directory for better development efficiency
 - ✅ **Performance & Memory Optimization**: Implemented `AbortController` and `Blob URL` cleanup to significantly reduce memory footprint
 - ✅ **Menu Options Optimization**: Optimized options for clothing styles, backgrounds, expressions, poses, and lighting
@@ -64,10 +66,11 @@ If you want to deploy it yourself, please refer to the GitHub/Cloudflare Pages d
    npm install
    ```
 3. **Configure environment variables** (create `.env.local` in the project root)
+
    ```dotenv
    # Gemini API Key (optional, but not recommended. After deployment, users can manually enter their Gemini API Key on the homepage after login. Storing the API Key locally reduces the risk of exposure)
    VITE_API_KEY=YOUR_GEMINI_OR_VEO_API_KEY
-   
+
    # Firebase Configuration (required)
    VITE_FIREBASE_API_KEY=YOUR_FIREBASE_API_KEY
    VITE_FIREBASE_AUTH_DOMAIN=xxx.firebaseapp.com
@@ -76,15 +79,15 @@ If you want to deploy it yourself, please refer to the GitHub/Cloudflare Pages d
    VITE_FIREBASE_MESSAGING_SENDER_ID=YOUR_SENDER_ID
    VITE_FIREBASE_APP_ID=YOUR_APP_ID
    ```
-   
+
    **📝 v1.0 Update: API Key Management**
-   
+
    API Key acquisition and management have been unified using `ApiKeyContext`:
    - **Priority**: Environment variable `VITE_API_KEY` > Browser extension `window.aistudio`
    - **Benefits**: Unified management logic, easy to test and extend
    - **Backward Compatible**: Existing functionality is unaffected, only internal implementation uses Context
    - For detailed information, please refer to [API_KEY_CONTEXT_REFACTOR.md](./API_KEY_CONTEXT_REFACTOR.md)
-   
+
 4. **Start the development server**
    ```bash
    npm run dev
@@ -105,6 +108,7 @@ The project has GitHub Actions automated deployment workflows configured. When y
 #### GitHub Pages Deployment
 
 **Advantages**:
+
 - ✅ Completely free
 - ✅ Automatic HTTPS
 - ✅ Great GitHub integration
@@ -113,38 +117,39 @@ The project has GitHub Actions automated deployment workflows configured. When y
 **Setup Steps**:
 
 1. **Create GitHub Actions Workflow**
-   
+
    Create `.github/workflows/deploy-pages.yml` in the project root:
+
    ```yaml
    name: Deploy to GitHub Pages
-   
+
    on:
      push:
        branches:
          - main
      workflow_dispatch:
-   
+
    permissions:
      contents: read
      pages: write
      id-token: write
-   
+
    jobs:
      build:
        runs-on: ubuntu-latest
        steps:
          - name: Checkout
            uses: actions/checkout@v4
-         
+
          - name: Setup Node.js
            uses: actions/setup-node@v4
            with:
              node-version: '20'
              cache: 'npm'
-         
+
          - name: Install dependencies
            run: npm ci
-         
+
          - name: Build
            run: npm run build
            env:
@@ -156,15 +161,15 @@ The project has GitHub Actions automated deployment workflows configured. When y
              VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
              VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
              VITE_BASE_PATH: ${{ secrets.VITE_BASE_PATH || '/' }}
-         
+
          - name: Setup Pages
            uses: actions/configure-pages@v4
-         
+
          - name: Upload artifact
            uses: actions/upload-pages-artifact@v3
            with:
              path: './dist'
-     
+
      deploy:
        environment:
          name: github-pages
@@ -201,6 +206,7 @@ The project has GitHub Actions automated deployment workflows configured. When y
    - Save settings
 
 4. **Push code**
+
    ```bash
    git add .
    git commit -m "Configure GitHub Pages deployment"
@@ -212,6 +218,7 @@ The project has GitHub Actions automated deployment workflows configured. When y
    - After deployment completes, the app will be automatically published to `https://<username>.github.io/<repository-name>`
 
 **⚠️ Notes**:
+
 - GitHub Pages will expose all environment variables in frontend code
 - It's recommended to set API Key usage limits (quota, IP restrictions)
 - For detailed security information, please refer to [SECURITY.md](./SECURITY.md)
@@ -221,6 +228,7 @@ The project has GitHub Actions automated deployment workflows configured. When y
 #### Cloudflare Pages Deployment
 
 **Advantages**:
+
 - ✅ Free tier available
 - ✅ Global CDN, extremely fast
 - ✅ Automatic HTTPS
@@ -237,7 +245,7 @@ The project has GitHub Actions automated deployment workflows configured. When y
    - Select `main` branch
 
 2. **Configure build settings**
-   
+
    In Cloudflare Pages project settings, go to **Builds & deployments**:
    - **Framework preset**: Vite (or leave empty)
    - **Build command**: `npm run build`
@@ -246,16 +254,17 @@ The project has GitHub Actions automated deployment workflows configured. When y
    - **Node.js version**: 20 (or higher)
 
 3. **Configure environment variables** ⚠️ **Important: Must be set manually**
-   
+
    **Cloudflare Pages will NOT automatically fill in environment variables**. You need to manually set them in the Cloudflare Dashboard.
-   
+
    **Setup Steps**:
    1. Go to **Settings** → **Environment Variables**
    2. Click **Add variable** (add variable)
    3. Select **Production** (production environment)
    4. Add the following variables in order:
-   
+
    **Required Variables (Firebase)**:
+
    ```
    VITE_FIREBASE_API_KEY = YOUR_FIREBASE_API_KEY
    VITE_FIREBASE_AUTH_DOMAIN = xxx.firebaseapp.com
@@ -264,18 +273,19 @@ The project has GitHub Actions automated deployment workflows configured. When y
    VITE_FIREBASE_MESSAGING_SENDER_ID = YOUR_SENDER_ID
    VITE_FIREBASE_APP_ID = YOUR_APP_ID
    ```
-   
+
    **Optional Variables**:
+
    ```
    VITE_API_KEY = YOUR_GEMINI_API_KEY (optional, but not recommended. After deployment, users can manually enter their Gemini API Key on the homepage after login. Storing the API Key locally reduces the risk of exposure)
    VITE_BASE_PATH = / (usually keep as /)
    ```
-   
+
    **⚠️ Notes**:
    - Variable names must be exactly correct (must start with `VITE_`)
    - Variable values should not contain extra spaces or quotes
    - After setting, you need to redeploy for changes to take effect
-   
+
    **Detailed setup steps** please refer to: [CLOUDFLARE_ENV_SETUP.md](./CLOUDFLARE_ENV_SETUP.md)
 
 4. **Branch Control**
@@ -293,6 +303,7 @@ The project has GitHub Actions automated deployment workflows configured. When y
    - After deployment completes, the app will be automatically published to `https://<project-name>.pages.dev`
 
 **⚠️ Notes**:
+
 - Cloudflare Pages will expose all environment variables in frontend code
 - It's recommended to use Cloudflare's environment variable management feature, not GitHub Secrets
 - Ensure `VITE_BASE_PATH` is set to `/` (unless using custom domain with subpath configuration)
@@ -305,12 +316,14 @@ The project has GitHub Actions automated deployment workflows configured. When y
 #### Vercel (Recommended)
 
 **Advantages**:
+
 - ✅ Free tier available
 - ✅ Best support for Vite projects
 - ✅ Automatic HTTPS and CDN
 - ✅ Best environment variable management interface
 
 **Setup Steps**:
+
 1. Go to <a href="https://vercel.com" target="_blank" rel="noopener noreferrer">Vercel</a> and register, link GitHub
 2. Click **New Project** → Select your repository
 3. Set all environment variables in **Environment Variables**
@@ -321,10 +334,12 @@ For detailed instructions, please refer to [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GU
 #### Firebase Hosting
 
 **Advantages**:
+
 - ✅ Good integration with Firebase services
 - ✅ Free tier available
 
 **Setup Steps**:
+
 ```bash
 # Install Firebase CLI
 npm install -g firebase-tools
@@ -389,12 +404,12 @@ Before deploying, please confirm:
 
 This project uses Firebase to provide the following services:
 
-| Service | Purpose | Environment Variables |
-|---------|---------|----------------------|
-| **Authentication** | User authentication (login, registration, password recovery) | `VITE_FIREBASE_API_KEY`<br>`VITE_FIREBASE_AUTH_DOMAIN` |
-| **Firestore** | Store user history records, usage counts | `VITE_FIREBASE_PROJECT_ID` |
-| **Storage** | Store generated images | `VITE_FIREBASE_STORAGE_BUCKET` |
-| **App Config** | Firebase application configuration | `VITE_FIREBASE_MESSAGING_SENDER_ID`<br>`VITE_FIREBASE_APP_ID` |
+| Service            | Purpose                                                      | Environment Variables                                         |
+| ------------------ | ------------------------------------------------------------ | ------------------------------------------------------------- |
+| **Authentication** | User authentication (login, registration, password recovery) | `VITE_FIREBASE_API_KEY`<br>`VITE_FIREBASE_AUTH_DOMAIN`        |
+| **Firestore**      | Store user history records, usage counts                     | `VITE_FIREBASE_PROJECT_ID`                                    |
+| **Storage**        | Store generated images                                       | `VITE_FIREBASE_STORAGE_BUCKET`                                |
+| **App Config**     | Firebase application configuration                           | `VITE_FIREBASE_MESSAGING_SENDER_ID`<br>`VITE_FIREBASE_APP_ID` |
 
 **Get Firebase Configuration Parameters**:
 
@@ -406,6 +421,7 @@ This project uses Firebase to provide the following services:
 6. Copy parameter values from Firebase configuration object
 
 **Required Parameters** (6):
+
 - `VITE_FIREBASE_API_KEY` - Firebase API Key
 - `VITE_FIREBASE_AUTH_DOMAIN` - Authentication domain (format: `<project-id>.firebaseapp.com`)
 - `VITE_FIREBASE_PROJECT_ID` - Project ID
@@ -440,6 +456,7 @@ If you have any questions, suggestions, or need technical support, welcome to jo
 👉 <a href="https://line.me/R/ti/g/@icareuec" target="_blank" rel="noopener noreferrer">Join FlyPig LINE Group</a>
 
 We provide:
+
 - Technical support and Q&A
 - Feature updates and usage tutorials
 - Community discussions and experience sharing

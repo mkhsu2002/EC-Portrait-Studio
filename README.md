@@ -31,6 +31,7 @@
 - **v1.0 (Initial Release)**:
 
 **主要改動**：
+
 - ✅ **全新架構整合**：將原始碼整合至 `src` 目錄，提升開發維護效率
 - ✅ **效能與記憶體優化**：引入 `AbortController` 與 `Blob URL` 釋放機制，大幅減少記憶體佔用
 - ✅ **功能選單優化**：優化服裝風格、背景、表情、姿勢、光線等選單內容
@@ -68,10 +69,11 @@
    npm install
    ```
 3. **設定環境變數**（於專案根目錄建立 `.env.local`）
+
    ```dotenv
    # Gemini API Key（可選，但不建議，可待部署完成後，直接於登入後首頁上手動輸入 Gemini API Key，將API Key 儲存於本地，可降低外洩風險）
    VITE_API_KEY=你的_GEMINI_API_KEY
-   
+
    # Firebase 設定（必要）
    VITE_FIREBASE_API_KEY=你的_FIREBASE_API_KEY
    VITE_FIREBASE_AUTH_DOMAIN=xxx.firebaseapp.com
@@ -80,15 +82,15 @@
    VITE_FIREBASE_MESSAGING_SENDER_ID=你的_SENDER_ID
    VITE_FIREBASE_APP_ID=你的_APP_ID
    ```
-   
+
    **📝 v1.0 更新：API Key 管理方式**
-   
+
    API Key 的取得與管理已統一改為使用 `ApiKeyContext` 管理：
    - **優先順序**：環境變數 `VITE_API_KEY` > 瀏覽器擴充功能 `window.aistudio`
    - **優點**：統一管理邏輯，易於測試與擴展
    - **向後相容**：現有功能不受影響，只是內部實作改為使用 Context
    - 詳細說明請參考 [API_KEY_CONTEXT_REFACTOR.md](./API_KEY_CONTEXT_REFACTOR.md)
-   
+
 4. **啟動開發伺服器**
    ```bash
    npm run dev
@@ -105,6 +107,7 @@
 ### Cloudflare Pages 部署（推薦）
 
 **優點**：
+
 - ✅ 免費方案
 - ✅ 全球 CDN，速度極快
 - ✅ 自動 HTTPS
@@ -121,7 +124,7 @@
    - 選擇 `main` 分支
 
 2. **設定建置設定**
-   
+
    在 Cloudflare Pages 專案設定中，前往 **Builds & deployments**：
    - **Framework preset**: Vite（或留空）
    - **Build command**: `npm run build`
@@ -130,16 +133,17 @@
    - **Node.js version**: 20（或更高）
 
 3. **設定環境變數** ⚠️ **重要：必須手動設定**
-   
+
    **Cloudflare Pages 不會自動填入環境變數**，您需要手動在 Cloudflare Dashboard 中設定。
-   
+
    **設定步驟**：
    1. 前往 **Settings** → **Environment Variables**
    2. 點擊 **Add variable**（新增變數）
    3. 選擇 **Production**（生產環境）
    4. 依序新增以下變數：
-   
+
    **必要變數（Firebase）**：
+
    ```
    VITE_FIREBASE_API_KEY = 你的_FIREBASE_API_KEY
    VITE_FIREBASE_AUTH_DOMAIN = xxx.firebaseapp.com
@@ -148,18 +152,19 @@
    VITE_FIREBASE_MESSAGING_SENDER_ID = 你的_SENDER_ID
    VITE_FIREBASE_APP_ID = 你的_APP_ID
    ```
-   
+
    **可選變數**：
+
    ```
    VITE_API_KEY = 你的_GEMINI_API_KEY（可選，但不建議，可待部署完成後，直接於登入後首頁上手動輸入 Gemini API Key，將API Key 儲存於本地，可降低外洩風險）
    VITE_BASE_PATH = /（通常保持為 /）
    ```
-   
+
    **⚠️ 注意事項**：
    - 變數名稱必須完全正確（必須以 `VITE_` 開頭）
    - 變數值不要包含多餘的空格或引號
    - 設定完成後需要重新部署才會生效
-   
+
    **詳細設定步驟**請參考：[CLOUDFLARE_PAGES_SETUP.md](./CLOUDFLARE_PAGES_SETUP.md)
 
 4. **分支控制**
@@ -177,6 +182,7 @@
    - 部署完成後，應用會自動發布到 `https://<project-name>.pages.dev`
 
 **⚠️ 注意事項**：
+
 - Cloudflare Pages 會將所有環境變數暴露在前端程式碼中
 - 建議使用 Cloudflare 的環境變數管理功能，而非 GitHub Secrets
 - 確保 `VITE_BASE_PATH` 設為 `/`（除非使用自訂域名且設定子路徑）
@@ -216,12 +222,12 @@
 
 本專案使用 Firebase 提供以下服務：
 
-| 服務 | 用途 | 環境變數 |
-|------|------|----------|
-| **Authentication** | 使用者認證（登入、註冊、忘記密碼） | `VITE_FIREBASE_API_KEY`<br>`VITE_FIREBASE_AUTH_DOMAIN` |
-| **Firestore** | 儲存使用者歷史紀錄、使用次數 | `VITE_FIREBASE_PROJECT_ID` |
-| **Storage** | 儲存生成的圖片 | `VITE_FIREBASE_STORAGE_BUCKET` |
-| **App Config** | Firebase 應用程式設定 | `VITE_FIREBASE_MESSAGING_SENDER_ID`<br>`VITE_FIREBASE_APP_ID` |
+| 服務               | 用途                               | 環境變數                                                      |
+| ------------------ | ---------------------------------- | ------------------------------------------------------------- |
+| **Authentication** | 使用者認證（登入、註冊、忘記密碼） | `VITE_FIREBASE_API_KEY`<br>`VITE_FIREBASE_AUTH_DOMAIN`        |
+| **Firestore**      | 儲存使用者歷史紀錄、使用次數       | `VITE_FIREBASE_PROJECT_ID`                                    |
+| **Storage**        | 儲存生成的圖片                     | `VITE_FIREBASE_STORAGE_BUCKET`                                |
+| **App Config**     | Firebase 應用程式設定              | `VITE_FIREBASE_MESSAGING_SENDER_ID`<br>`VITE_FIREBASE_APP_ID` |
 
 **取得 Firebase 設定參數**：
 
@@ -233,6 +239,7 @@
 6. 複製 Firebase 設定物件中的參數值
 
 **必要參數**（6 個）：
+
 - `VITE_FIREBASE_API_KEY` - Firebase API Key
 - `VITE_FIREBASE_AUTH_DOMAIN` - 認證網域（格式：`<project-id>.firebaseapp.com`）
 - `VITE_FIREBASE_PROJECT_ID` - 專案 ID
@@ -265,6 +272,7 @@
 👉 <a href="https://line.me/R/ti/g/@icareuec" target="_blank" rel="noopener noreferrer">加入 FlyPig LINE 群組</a>
 
 我們會在這裡提供：
+
 - 技術支援與問題解答
 - 功能更新與使用教學
 - 社群討論與經驗分享
@@ -286,7 +294,7 @@
 您的支持是我持續開發的動力！
 
 若需協助委外部署或客製化選項開發（例如新增場景、人物姿態)，歡迎聯絡 FlyPig AI
-Email: flypig@icareu.tw  / LINE ID: icareuec
+Email: flypig@icareu.tw / LINE ID: icareuec
 
 ## 授權條款
 
