@@ -1,6 +1,6 @@
 # AI Digital Portrait Studio
 
-**Version: v1.0**
+**Version: v1.5**
 
 AI Digital Portrait Studio is a React + Vite web application that integrates Google Gemini image models with Firebase services to help brands quickly generate multi-angle portrait product images. The project is open source—feel free to deploy and customize according to your needs.
 
@@ -15,6 +15,13 @@ No deployment needed! Click the link below and enter your own Gemini API Key (wi
 If you want to deploy it yourself, please refer to the GitHub/Cloudflare Pages deployment guide below!
 
 ## 📋 Version Information
+
+### v1.5 (Current)
+
+**Major Changes**:
+- Fixed deployed image generation failures by updating Gemini image generation requests to the current API contract: `responseFormat.image.aspectRatio`.
+- Updated the Gemini 3 Pro image model from the old preview name to the official `gemini-3-pro-image`, while preserving compatibility for old history records that still contain the preview model value.
+- Improved Google Gemini SDK error parsing so production no longer collapses API failures into only "unknown error".
 
 ### v1.0 (Official Release)
 
@@ -38,7 +45,11 @@ If you want to deploy it yourself, please refer to the GitHub/Cloudflare Pages d
 
 - React 19, TypeScript, Vite 6
 - Firebase Authentication, Firestore, Storage
-- Google Gemini `gemini-2.5-flash-image` / Veo `veo-3.1-fast-generate-preview`
+- Google Gemini image generation models:
+  - `gemini-2.5-flash-image`: default fast image generation model
+  - `gemini-3-pro-image`: high-quality professional image generation model
+- Gemini image aspect ratio configuration uses the current API contract: `responseFormat.image.aspectRatio`
+- Veo video generation: `veo-3.1-fast-generate-preview`
 - Tailwind-style utility classes written directly via `className`
 
 ## Local Development

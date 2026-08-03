@@ -691,7 +691,7 @@ const translations: Record<Language, Translations> = {
     "languageName": "繁體中文",
     "toggleLabel": "English",
     header: {
-      "title": "電商人像攝影棚 v1.2",
+      "title": "電商人像攝影棚 v1.5",
       "subtitle": "專為電商產業所設計，一鍵生成專業人像攝影照",
       welcome: (email) => `歡迎，${email}`,
       credits: (remaining, isLoading) =>
@@ -819,7 +819,7 @@ const translations: Record<Language, Translations> = {
     "languageName": "English",
     "toggleLabel": "中文",
     header: {
-      "title": "AI Digital Portrait Studio v1.0",
+      "title": "AI Digital Portrait Studio v1.5",
       "subtitle": "Designed for e-commerce—generate professional portrait shots in one click",
       welcome: (email) => `Welcome, ${email}`,
       credits: (remaining, isLoading) =>

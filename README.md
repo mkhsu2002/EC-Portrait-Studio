@@ -1,6 +1,6 @@
 # AI Digital Portrait Studio
 
-**版本：v1.0**
+**版本：v1.5**
 
 「電商人像攝影棚」是一套基於 React + Vite 的網頁應用，整合 Google Gemini 影像模型與 Firebase 服務，協助品牌快速生成多視角的人像商品圖。專案已開源，歡迎自行部署並依需求調整。
 
@@ -16,11 +16,15 @@
 
 ### 📊 版本歷史
 
-- **v1.2 (Current)**:
+- **v1.5 (Current)**:
+  - 修復部署後圖片生成任務失敗問題，Gemini 影像生成請求已改用目前 API 契約的 `responseFormat.image.aspectRatio`。
+  - 將 Gemini 3 Pro 影像模型從舊 preview 名稱更新為正式 `gemini-3-pro-image`，並保留舊歷史紀錄模型值的相容轉換。
+  - 改善 Google Gemini SDK 錯誤解析，避免正式環境只顯示「發生未知錯誤」。
+- **v1.2**:
   - 導入 Gemini 2.5 Flash 生成/優化提示詞功能。
   - 新增「補充描述」專用的 AI 產生器按鈕。
 - **v1.1**:
-  - 導入 Gemini 3.0 Pro 生成預覽預設選項。
+  - 導入 Gemini 3 Pro 生成預覽預設選項。
   - 新增四重視角參考圖上傳（正面/商品/姿勢/表情或視角）。
   - 將 Gemini 2.0 Flash 升級至 2.5 版本。
   - 更新環境變數與提示詞生成邏輯。
@@ -46,7 +50,10 @@
 
 - React 19、TypeScript、Vite 6
 - Firebase Authentication、Firestore、Storage
-- Google Gemini `gemini-2.5-flash-image` 影像生成模型
+- Google Gemini 影像生成模型：
+  - `gemini-2.5-flash-image`：預設快速影像生成模型
+  - `gemini-3-pro-image`：高品質專業影像生成模型
+- Gemini 影像長寬比設定採用目前 API 契約：`responseFormat.image.aspectRatio`
 - Tailwind CSS 原子化樣式（以 `className` 直接撰寫）
 
 ## 本地部署流程
