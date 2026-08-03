@@ -19,6 +19,38 @@ export interface AppError {
   userMessage?: string; // 友善的使用者訊息
 }
 
+function extractErrorMessage(error: unknown): string | null {
+  if (!error || typeof error !== 'object') {
+    return null;
+  }
+
+  const record = error as Record<string, unknown>;
+  const directMessage = record.message;
+  if (typeof directMessage === 'string' && directMessage.trim()) {
+    return directMessage;
+  }
+
+  const nestedError = record.error;
+  if (nestedError && typeof nestedError === 'object') {
+    const nestedMessage = (nestedError as Record<string, unknown>).message;
+    if (typeof nestedMessage === 'string' && nestedMessage.trim()) {
+      return nestedMessage;
+    }
+  }
+
+  const details = record.details;
+  if (Array.isArray(details)) {
+    const detailMessage = details
+      .map((detail) => extractErrorMessage(detail))
+      .find((message): message is string => !!message);
+    if (detailMessage) {
+      return detailMessage;
+    }
+  }
+
+  return null;
+}
+
 /**
  * 處理錯誤並轉換為 AppError
  */
@@ -237,6 +269,11 @@ export function handleError(error: unknown, userMessage?: string): AppError {
     };
   }
 
+  const extractedMessage = extractErrorMessage(error);
+  if (extractedMessage) {
+    return handleError(new Error(extractedMessage), userMessage);
+  }
+
   // 未知錯誤類型 - 在開發模式下顯示更多資訊
   const errorString = String(error);
   const errorInfo = import.meta.env.DEV 
@@ -278,5 +315,4 @@ export function logError(error: AppError, context?: string): void {
     });
   }
 }
-
 

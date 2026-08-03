@@ -24,6 +24,14 @@ interface ApiContextValue {
 
 const ApiContext = createContext<ApiContextValue | undefined>(undefined);
 
+const normalizeImageModel = (model?: string): string => {
+  if (model === "gemini-3-pro-image-preview") {
+    return "gemini-3-pro-image";
+  }
+
+  return model || "gemini-2.5-flash-image";
+};
+
 export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // 使用 ApiKeyContext 統一管理 API Key
   const apiKeyContext = useApiKey();
@@ -222,15 +230,17 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             throw new Error('Request cancelled');
           }
           return client.models.generateContent({
-            model: formData.imageModel || "gemini-2.5-flash-image",
+            model: normalizeImageModel(formData.imageModel),
             contents: [{
               role: 'user',
               parts,
             }],
             config: {
               responseModalities: [Modality.IMAGE],
-              imageConfig: {
-                aspectRatio: formData.aspectRatio,
+              responseFormat: {
+                image: {
+                  aspectRatio: formData.aspectRatio,
+                },
               },
             },
           }) as Promise<GeminiResponse>;
@@ -518,4 +528,3 @@ export const useApi = (): ApiContextValue => {
   }
   return context;
 };
-

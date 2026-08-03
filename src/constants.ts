@@ -273,5 +273,5 @@ export const MODEL_GENDERS = ["女性模特兒", "男性模特兒"];
 // 圖片生成模型選項
 export const IMAGE_MODELS = [
   "gemini-2.5-flash-image",
-  "gemini-3-pro-image-preview",
+  "gemini-3-pro-image",
 ];

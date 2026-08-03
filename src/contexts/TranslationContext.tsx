@@ -258,7 +258,7 @@ const optionLabels: Record<Language, OptionLabelMap> = {
     },
     imageModel: {
       "gemini-2.5-flash-image": "Gemini 2.5 Flash（快速，經濟）",
-      "gemini-3-pro-image-preview": "Gemini 3 Pro（高品質，專業）",
+      "gemini-3-pro-image": "Gemini 3 Pro（高品質，專業）",
     },
   },
   en: {
@@ -501,7 +501,7 @@ const optionLabels: Record<Language, OptionLabelMap> = {
     },
     imageModel: {
       "gemini-2.5-flash-image": "Gemini 2.5 Flash (Fast, Economical)",
-      "gemini-3-pro-image-preview": "Gemini 3 Pro (High Quality, Professional)",
+      "gemini-3-pro-image": "Gemini 3 Pro (High Quality, Professional)",
     },
   },
 };
